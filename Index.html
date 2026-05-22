@@ -30,7 +30,7 @@
   header h1 .logo{width:24px;height:24px;background:var(--accent);border-radius:6px;
     display:inline-flex;align-items:center;justify-content:center;color:white;font-weight:900;font-size:15px;}
   header .sub{font-size:12px;color:var(--muted);margin-top:2px;}
- 
+
   /* Tab nav */
   nav.tabs{position:fixed;bottom:0;left:0;right:0;background:var(--panel);
     border-top:1px solid var(--line);display:flex;justify-content:space-around;
@@ -40,18 +40,18 @@
     align-items:center;gap:2px;font-family:inherit;}
   nav.tabs button.active{color:var(--accent);}
   nav.tabs button svg{width:22px;height:22px;}
- 
+
   /* Views */
   .view{display:none;padding:16px;animation:fadeIn .15s ease;}
   .view.active{display:block;}
   @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:none;}}
- 
+
   /* Cards */
   .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;
     padding:16px;margin-bottom:12px;}
   .card h2{margin:0 0 12px;font-size:15px;font-weight:600;display:flex;align-items:center;justify-content:space-between;}
   .card h3{margin:14px 0 8px;font-size:13px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
- 
+
   /* Macro ring/bar */
   .macros{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px;}
   .macro{background:var(--panel2);border-radius:8px;padding:10px 8px;text-align:center;}
@@ -61,12 +61,12 @@
   .macro.over .val{color:var(--bad);}
   .macro .bar{height:3px;background:var(--line);border-radius:2px;margin-top:6px;overflow:hidden;}
   .macro .bar i{display:block;height:100%;background:var(--accent);transition:width .25s;}
- 
+
   /* Big progress bar */
   .pbar{height:8px;background:var(--line);border-radius:4px;overflow:hidden;margin:8px 0;}
   .pbar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .3s;}
   .pbar.water i{background:linear-gradient(90deg,var(--blue),#5dade2);}
- 
+
   /* Buttons */
   button.btn{background:var(--accent);color:white;border:0;border-radius:10px;
     padding:12px 16px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;}
@@ -76,7 +76,7 @@
   button.btn.danger{background:var(--bad);}
   button.btn.sm{padding:8px 12px;font-size:13px;}
   .btn-row{display:flex;gap:8px;flex-wrap:wrap;}
- 
+
   /* Form */
   input,select,textarea{background:var(--panel2);border:1px solid var(--line);color:var(--text);
     border-radius:8px;padding:11px 12px;font-size:15px;width:100%;font-family:inherit;
@@ -84,7 +84,7 @@
   input:focus,select:focus{outline:0;border-color:var(--accent);}
   label{display:block;font-size:12px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px;}
   .field{margin-bottom:10px;}
- 
+
   /* Meal */
   .meal{margin-bottom:14px;}
   .meal-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;}
@@ -100,7 +100,7 @@
   .add-btn{background:var(--panel2);border:1px dashed var(--line);color:var(--muted);
     border-radius:8px;padding:10px;width:100%;text-align:center;cursor:pointer;font-size:13px;font-family:inherit;}
   .add-btn:active{background:var(--line);}
- 
+
   /* Water */
   .water-quick{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px;}
   .water-quick button{background:var(--panel2);border:1px solid var(--line);color:var(--text);
@@ -108,7 +108,7 @@
   .water-quick button:active{background:var(--accent);color:white;}
   .water-big{font-size:32px;font-weight:800;text-align:center;margin:8px 0 0;}
   .water-big small{font-size:14px;color:var(--muted);font-weight:400;}
- 
+
   /* Calendar */
   .cal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
   .cal-head h2{margin:0;font-size:16px;}
@@ -131,7 +131,7 @@
   .cal-cell .tag.recov{background:var(--muted);}
   .cal-cell .tag.rest{background:#555;}
   .cal-cell.done::after{content:"✓";position:absolute;bottom:2px;right:3px;color:var(--good);font-weight:900;font-size:13px;}
- 
+
   /* Workout detail */
   .ex{background:var(--panel2);border-radius:10px;padding:12px;margin-bottom:8px;}
   .ex-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;}
@@ -145,7 +145,7 @@
   .set-row.done{opacity:.6;}
   .set-row.done button{background:var(--muted);}
   .set-row .add-set{grid-column:1/-1;}
- 
+
   /* Scanner */
   #scanner-region{width:100%;border-radius:12px;overflow:hidden;background:black;margin-bottom:12px;}
   .modal{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:200;display:none;
@@ -155,7 +155,7 @@
     padding:16px;max-width:520px;width:100%;}
   .modal-inner h2{margin:0 0 12px;font-size:16px;display:flex;justify-content:space-between;align-items:center;}
   .modal-inner h2 .x{background:none;border:0;color:var(--muted);font-size:24px;cursor:pointer;line-height:1;}
- 
+
   /* Stat grid */
   .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;}
   .stat{background:var(--panel2);border-radius:10px;padding:12px;}
@@ -163,32 +163,32 @@
   .stat .v{font-size:22px;font-weight:700;margin:4px 0 0;}
   .stat .d{font-size:11px;color:var(--good);}
   .stat .d.down{color:var(--bad);}
- 
+
   /* History list */
   .hist-row{background:var(--panel2);border-radius:8px;padding:10px 12px;margin-bottom:6px;
     display:flex;justify-content:space-between;align-items:center;font-size:13px;cursor:pointer;}
   .hist-row .dt{font-weight:600;}
   .hist-row .ds{font-size:11px;color:var(--muted);}
- 
+
   /* Race countdown */
   .countdown{background:linear-gradient(135deg,var(--accent),var(--accent2));
     color:white;border-radius:12px;padding:14px 16px;margin-bottom:12px;}
   .countdown .days{font-size:32px;font-weight:900;line-height:1;}
   .countdown .lbl{font-size:12px;text-transform:uppercase;letter-spacing:.5px;opacity:.9;}
   .countdown .sub{font-size:13px;margin-top:6px;opacity:.95;}
- 
+
   .empty-state{text-align:center;color:var(--muted);padding:30px 16px;font-size:13px;}
   .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);
     background:var(--panel);border:1px solid var(--line);padding:10px 16px;
     border-radius:8px;font-size:13px;z-index:300;opacity:0;transition:opacity .2s;pointer-events:none;}
   .toast.show{opacity:1;}
- 
+
   hr{border:0;border-top:1px solid var(--line);margin:12px 0;}
   .row{display:flex;gap:8px;align-items:center;}
   .row > *{flex:1;}
   .small{font-size:12px;color:var(--muted);}
   .center{text-align:center;}
- 
+
   /* Rest timer floating bar */
   #rest-timer{position:fixed;left:0;right:0;bottom:calc(76px + var(--safe-bot));
     background:var(--panel);border-top:1px solid var(--accent);padding:10px 14px;
@@ -199,7 +199,7 @@
   @keyframes pulse{from{opacity:.85;}to{opacity:1;}}
   #rt-info{flex:1;min-width:0;}
   #rt-ex{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  #rt-timer.expired #rt-ex{color:white;}
+  #rest-timer.expired #rt-ex{color:white;}
   #rt-time{font-size:26px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums;}
   #rest-timer.expired #rt-time{color:white;}
   .rt-btn{background:var(--panel2);border:1px solid var(--line);color:var(--text);
@@ -211,12 +211,12 @@
 </style>
 </head>
 <body>
- 
+
 <header>
   <h1><span class="logo">S</span> Spartan Tracker</h1>
   <div class="sub" id="header-sub">Monroe, WA · Sept 2026</div>
 </header>
- 
+
 <!-- ===================== TODAY ===================== -->
 <section class="view active" id="view-today">
   <div class="countdown" id="countdown-card">
@@ -224,7 +224,7 @@
     <div class="lbl">Days to race</div>
     <div class="sub" id="countdown-sub"></div>
   </div>
- 
+
   <div class="card">
     <h2>Today's Macros <span class="small" id="cal-summary"></span></h2>
     <div class="pbar"><i id="cal-bar"></i></div>
@@ -235,7 +235,7 @@
       <div class="macro"><div class="label">Fat</div><div class="val" id="m-fat">0</div><div class="target" id="t-fat">/85g</div><div class="bar"><i id="b-fat"></i></div></div>
     </div>
   </div>
- 
+
   <div class="card">
     <h2>Water</h2>
     <div class="water-big"><span id="water-oz">0</span> <small>/ <span id="water-tgt">128</span> oz</small></div>
@@ -251,12 +251,12 @@
       <button class="btn ghost sm" onclick="addWater(-8)">Undo</button>
     </div>
   </div>
- 
+
   <div class="card" id="today-workout-card">
     <h2>Today's Workout <button class="btn sm" onclick="showView('workout')">Open</button></h2>
     <div id="today-wk-summary"></div>
   </div>
- 
+
   <div class="card">
     <h2>Weight</h2>
     <div class="row">
@@ -266,12 +266,12 @@
     <div class="small" id="weight-msg" style="margin-top:6px;"></div>
   </div>
 </section>
- 
+
 <!-- ===================== FOOD ===================== -->
 <section class="view" id="view-food">
   <div class="card">
     <h2>Today's Food <span class="small" id="food-day-cal"></span></h2>
- 
+
     <div class="meal" data-meal="breakfast">
       <div class="meal-head"><span class="name">Breakfast</span><span class="cal" id="cal-breakfast">0 cal</span></div>
       <div id="list-breakfast"></div>
@@ -293,13 +293,13 @@
       <button class="add-btn" onclick="openAdd('snacks')">+ Add snack</button>
     </div>
   </div>
- 
+
   <div class="card">
     <h2>Saved Foods</h2>
     <div id="saved-foods"></div>
   </div>
 </section>
- 
+
 <!-- ===================== WORKOUT ===================== -->
 <section class="view" id="view-workout">
   <div class="card">
@@ -320,7 +320,7 @@
       <span style="color:var(--muted);">●</span> Recovery
     </div>
   </div>
- 
+
   <div class="card" id="workout-detail-card">
     <h2 id="wk-title">Today's Workout</h2>
     <div id="wk-meta" class="small" style="margin-bottom:8px;"></div>
@@ -334,7 +334,7 @@
     </div>
   </div>
 </section>
- 
+
 <!-- ===================== STATS ===================== -->
 <section class="view" id="view-stats">
   <div class="card">
@@ -346,17 +346,17 @@
       <div class="stat"><div class="lbl">Days logged</div><div class="v" id="s-days">0</div></div>
     </div>
   </div>
- 
+
   <div class="card">
     <h2>Recent Workouts</h2>
     <div id="hist-workouts"></div>
   </div>
- 
+
   <div class="card">
     <h2>Weight Log</h2>
     <div id="hist-weight"></div>
   </div>
- 
+
   <div class="card">
     <h2>Settings</h2>
     <div class="field"><label>Race Date</label><input type="date" id="set-race"/></div>
@@ -378,18 +378,18 @@
     <button class="btn danger full" onclick="resetData()">Reset All Data</button>
   </div>
 </section>
- 
+
 <!-- ===================== ADD FOOD MODAL ===================== -->
 <div class="modal" id="modal-add">
   <div class="modal-inner">
     <h2>Add Food <button class="x" onclick="closeAdd()">×</button></h2>
     <div class="small" id="add-meal-name">to Breakfast</div>
- 
+
     <div class="btn-row" style="margin:12px 0;">
       <button class="btn ghost" onclick="startScan()" style="flex:1;">📷 Scan Barcode</button>
       <button class="btn ghost" onclick="searchOff()" style="flex:1;">🔍 Search</button>
     </div>
- 
+
     <div id="search-block" style="display:none;">
       <div class="row">
         <input id="search-q" placeholder="e.g. chicken breast" />
@@ -397,10 +397,10 @@
       </div>
       <div id="search-results" style="margin-top:8px;"></div>
     </div>
- 
+
     <div id="scanner-region" style="display:none;"></div>
     <div id="scanner-status" class="small center"></div>
- 
+
     <hr/>
     <h3 style="margin:0 0 8px;font-size:13px;color:var(--muted);text-transform:uppercase;">Manual Entry</h3>
     <div class="field"><label>Food Name</label><input id="f-name" placeholder="e.g. Greek Yogurt"/></div>
@@ -420,7 +420,7 @@
     <button class="btn full" onclick="addFood()">Add Food</button>
   </div>
 </div>
- 
+
 <!-- ===================== REST TIMER ===================== -->
 <div id="rest-timer">
   <div id="rt-info">
@@ -431,7 +431,7 @@
   <button class="rt-btn" onclick="adjustTimer(15)">+15s</button>
   <button class="rt-btn skip" onclick="skipTimer()">Skip</button>
 </div>
- 
+
 <!-- ===================== TAB NAV ===================== -->
 <nav class="tabs">
   <button class="active" data-tab="today" onclick="showView('today')">
@@ -451,9 +451,9 @@
     Stats
   </button>
 </nav>
- 
+
 <div class="toast" id="toast"></div>
- 
+
 <script>
 // ============================================================
 // STATE & STORAGE
@@ -475,17 +475,23 @@ const DEFAULT_STATE = {
   weightLog: {},    // {date: lbs}
   savedFoods: []    // [{name, calories, protein, carbs, fat}]
 };
- 
+
 let state = loadState();
 function loadState(){
   try { const s = JSON.parse(localStorage.getItem(KEY)); return s ? Object.assign({}, DEFAULT_STATE, s) : structuredClone(DEFAULT_STATE); }
   catch(e){ return structuredClone(DEFAULT_STATE); }
 }
 function save(){ localStorage.setItem(KEY, JSON.stringify(state)); }
-function todayKey(){ return new Date().toISOString().slice(0,10); }
-function dateKey(d){ return d.toISOString().slice(0,10); }
+function dateKey(d){
+  // Local-date YYYY-MM-DD (toISOString uses UTC and shifts the day in non-UTC zones)
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,'0');
+  const day = String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${day}`;
+}
+function todayKey(){ return dateKey(new Date()); }
 function parseDate(s){ return new Date(s + 'T00:00:00'); }
- 
+
 function getDayFood(d){
   if(!state.foodLog[d]) state.foodLog[d] = {breakfast:[], lunch:[], dinner:[], snacks:[]};
   return state.foodLog[d];
@@ -504,12 +510,12 @@ function dayTotals(d){
   });
   return {cal:Math.round(cal),pro:Math.round(pro),car:Math.round(car),fat:Math.round(fat)};
 }
- 
+
 function mealCals(d, meal){
   const items = getDayFood(d)[meal];
   return Math.round(items.reduce((s,it)=>s+(it.calories||0)*(it.servings||1),0));
 }
- 
+
 // ============================================================
 // UI HELPERS
 // ============================================================
@@ -528,7 +534,7 @@ function toast(msg){
   t.textContent = msg; t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'), 1800);
 }
- 
+
 // ============================================================
 // TODAY VIEW
 // ============================================================
@@ -536,7 +542,7 @@ function renderToday(){
   const d = todayKey();
   const t = dayTotals(d);
   const p = state.profile;
- 
+
   document.getElementById('m-cal').textContent = t.cal;
   document.getElementById('m-pro').textContent = t.pro + 'g';
   document.getElementById('m-car').textContent = t.car + 'g';
@@ -550,9 +556,13 @@ function renderToday(){
   document.getElementById('b-car').style.width = Math.min(100, t.car/p.carGoal*100) + '%';
   document.getElementById('b-fat').style.width = Math.min(100, t.fat/p.fatGoal*100) + '%';
   document.getElementById('cal-bar').style.width = Math.min(100, t.cal/p.calGoal*100) + '%';
+  // Visually flag any macro that's over target
+  [['cal',t.cal,p.calGoal],['pro',t.pro,p.proGoal],['car',t.car,p.carGoal],['fat',t.fat,p.fatGoal]].forEach(([k,v,g])=>{
+    document.getElementById('m-'+k).parentElement.classList.toggle('over', v > g);
+  });
   const remain = p.calGoal - t.cal;
   document.getElementById('cal-summary').textContent = (remain>=0 ? remain+' left' : Math.abs(remain)+' over');
- 
+
   // Water
   const w = state.waterLog[d] || 0;
   document.getElementById('water-oz').textContent = w;
@@ -560,7 +570,7 @@ function renderToday(){
   document.getElementById('water-bar').style.width = Math.min(100, w/p.waterGoal*100) + '%';
   const pct = Math.round(w/p.waterGoal*100);
   document.getElementById('water-msg').textContent = pct >= 100 ? '✓ Daily goal hit' : (p.waterGoal-w)+' oz to go';
- 
+
   // Countdown
   const race = parseDate(p.raceDate);
   const today = new Date(); today.setHours(0,0,0,0);
@@ -570,7 +580,7 @@ function renderToday(){
   document.getElementById('countdown-sub').textContent = days >= 0
     ? `Week ${phase.weekNum} of 16 · ${phase.name} phase`
     : 'Race day or later — congrats!';
- 
+
   // Today's workout
   const wk = getWorkoutForDate(today);
   const todayWk = document.getElementById('today-wk-summary');
@@ -582,7 +592,7 @@ function renderToday(){
   } else {
     todayWk.innerHTML = '<div class="small">Rest day. Recover well.</div>';
   }
- 
+
   // Weight latest
   const wt = state.weightLog[d];
   if(wt) document.getElementById('weight-msg').textContent = 'Logged today: ' + wt + ' lbs';
@@ -592,14 +602,14 @@ function renderToday(){
     else document.getElementById('weight-msg').textContent = '';
   }
 }
- 
+
 function addWater(oz){
   const d = todayKey();
   const cur = state.waterLog[d] || 0;
   state.waterLog[d] = Math.max(0, cur + oz);
   save(); renderToday();
 }
- 
+
 function logWeight(){
   const v = parseFloat(document.getElementById('weight-input').value);
   if(!v || v<50 || v>700){ toast('Enter a valid weight'); return; }
@@ -608,12 +618,12 @@ function logWeight(){
   document.getElementById('weight-input').value = '';
   toast('Weight logged'); renderToday();
 }
- 
+
 // ============================================================
 // FOOD VIEW
 // ============================================================
 let currentMeal = 'breakfast';
- 
+
 function renderFood(){
   const d = todayKey();
   const food = getDayFood(d);
@@ -639,7 +649,7 @@ function renderFood(){
   });
   const t = dayTotals(d);
   document.getElementById('food-day-cal').textContent = t.cal + ' cal · ' + t.pro + 'p / ' + t.car + 'c / ' + t.fat + 'f';
- 
+
   // Saved foods
   const sf = document.getElementById('saved-foods');
   if(!state.savedFoods.length){
@@ -659,13 +669,13 @@ function renderFood(){
     });
   }
 }
- 
+
 function removeFood(meal, idx){
   const d = todayKey();
   getDayFood(d)[meal].splice(idx, 1);
   save(); renderFood(); renderToday();
 }
- 
+
 function openAdd(meal){
   currentMeal = meal;
   document.getElementById('add-meal-name').textContent = 'to ' + meal.charAt(0).toUpperCase() + meal.slice(1);
@@ -695,7 +705,7 @@ function quickAddSaved(idx){
   getDayFood(todayKey())[m].push({...it, servings});
   save(); renderFood(); renderToday(); toast('Added to '+m);
 }
- 
+
 function addFood(){
   const name = document.getElementById('f-name').value.trim();
   const cal = parseFloat(document.getElementById('f-cal').value) || 0;
@@ -705,7 +715,7 @@ function addFood(){
   const serv = parseFloat(document.getElementById('f-serv').value) || 1;
   const sav = document.getElementById('f-save').checked;
   if(!name){ toast('Enter a name'); return; }
- 
+
   const item = {name, calories:cal, protein:pro, carbs:car, fat:fat, servings:serv};
   getDayFood(todayKey())[currentMeal].push(item);
   if(sav){
@@ -714,11 +724,11 @@ function addFood(){
   }
   save(); closeAdd(); renderFood(); renderToday(); toast('Added to '+currentMeal);
 }
- 
+
 function escapeHtml(s){
   return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
- 
+
 // ============================================================
 // BARCODE SCAN + OPEN FOOD FACTS
 // ============================================================
@@ -783,7 +793,7 @@ async function lookupBarcode(code){
     document.getElementById('scanner-status').textContent = 'Lookup failed (' + e.message + '). Enter manually.';
   }
 }
- 
+
 function searchOff(){
   document.getElementById('scanner-region').style.display = 'none';
   stopScan();
@@ -827,7 +837,7 @@ async function doSearch(){
     box.innerHTML = '<div class="small">Search failed. Need internet. Use manual entry below.</div>';
   }
 }
- 
+
 // ============================================================
 // WORKOUT CALENDAR & PROGRAM
 // ============================================================
@@ -843,7 +853,7 @@ function currentPhase(d){
   if(weekNum <= 16) return {name:'Taper', weekNum, key:'taper'};
   return {name:'Race', weekNum, key:'race'};
 }
- 
+
 const PHASE_PARAMS = {
   base:     { squat:'4×8 @ ~65% 1RM',  bench:'4×8 @ ~65% 1RM',  intervals:'4 × 400m moderate (RPE 7), 90s walk recovery', hills:'30 min: 5 min flat warm-up, then alternate 5 min flat / 5 min @ 5% incline (3.5–4 mph)', metcon:'3 rounds, 2 min rest between rounds' },
   build:    { squat:'4×6 @ ~75% 1RM',  bench:'4×6 @ ~75% 1RM',  intervals:'6 × 400m at 5K race pace, 60s recovery',           hills:'40 min: extend incline blocks to 7 min @ 6–7% incline',                                       metcon:'4 rounds, 90s rest' },
@@ -852,7 +862,7 @@ const PHASE_PARAMS = {
   taper:    { squat:'3×5 @ ~65%',      bench:'3×5 @ ~65%',      intervals:'4 × 200m strides, full recovery — not max',         hills:'25 min easy @ 1% incline',                                                                     metcon:'2 rounds, easy effort — keep patterns sharp' },
   race:     { squat:'—', bench:'—', intervals:'Race day', hills:'Race day', metcon:'Race day' }
 };
- 
+
 const DAY_TEMPLATES = {
   // 0=Sun 1=Mon 2=Tue 3=Wed 4=Thu 5=Fri 6=Sat
   1: { type:'lift', tag:'LIFT', title:'Lower Body Strength + Grip', exercises: (p)=>[
@@ -918,7 +928,7 @@ const DAY_TEMPLATES = {
     {name:'Test fasting BG', target:'Morning'}
   ]}
 };
- 
+
 function getWorkoutForDate(d){
   const ph = currentPhase(d);
   if(ph.weekNum < 1 || ph.weekNum > 16) return null;
@@ -933,10 +943,10 @@ function getWorkoutForDate(d){
     summary: `${template.title} · Week ${ph.weekNum} · ${ph.name}`
   };
 }
- 
+
 let calendarMonth = null; // Date object for the month being viewed
 let currentWorkoutDate = null; // YYYY-MM-DD
- 
+
 function renderCalendar(){
   const today = new Date(); today.setHours(0,0,0,0);
   if(!calendarMonth) calendarMonth = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -970,7 +980,7 @@ function navMonth(delta){
   calendarMonth.setMonth(calendarMonth.getMonth()+delta);
   renderCalendar();
 }
- 
+
 function renderWorkoutDetail(dateStr){
   const d = parseDate(dateStr);
   const wk = getWorkoutForDate(d);
@@ -1024,10 +1034,10 @@ function renderWorkoutDetail(dateStr){
     save();
   };
   const btn = document.getElementById('wk-complete-btn');
-  if(log.completed){ btn.textContent = 'Completed ✓ — tap to undo'; btn.classList.add('ghost'); btn.classList.remove('btn'); btn.classList.add('btn'); }
-  else { btn.textContent = 'Mark Workout Complete'; }
+  if(log.completed){ btn.textContent = 'Completed ✓ — tap to undo'; btn.classList.add('ghost'); }
+  else { btn.textContent = 'Mark Workout Complete'; btn.classList.remove('ghost'); }
 }
- 
+
 function getOrInitLog(dateStr, exCount){
   if(!state.workoutLog[dateStr]) state.workoutLog[dateStr] = {completed:false, notes:'', lifts:[]};
   const l = state.workoutLog[dateStr];
@@ -1075,7 +1085,7 @@ function completeWorkout(){
   renderToday();
   toast(l.completed ? 'Workout marked complete ✓' : 'Marked incomplete');
 }
- 
+
 // ============================================================
 // STATS / HISTORY
 // ============================================================
@@ -1084,10 +1094,12 @@ function renderStats(){
   const dates = Object.keys(log).sort();
   const done = dates.filter(d=>log[d].completed);
   document.getElementById('s-workouts').textContent = done.length;
-  // Current streak — count back from today
+  // Current streak — count back from today (bounded so we never walk past program start)
   let streak = 0;
   let d = new Date(); d.setHours(0,0,0,0);
-  while(true){
+  const programStart = parseDate(state.profile.startDate);
+  let safety = 0;
+  while(d >= programStart && safety++ < 200){
     const k = dateKey(d);
     const wk = getWorkoutForDate(d);
     if(!wk) { d.setDate(d.getDate()-1); continue; }
@@ -1105,7 +1117,7 @@ function renderStats(){
     ...Object.keys(state.weightLog)
   ]).size;
   document.getElementById('s-days').textContent = daysLogged;
- 
+
   // Recent workouts
   const hwk = document.getElementById('hist-workouts');
   const recent = dates.filter(d=>log[d].completed).reverse().slice(0,10);
@@ -1123,7 +1135,7 @@ function renderStats(){
       hwk.appendChild(div);
     });
   }
- 
+
   // Weight history
   const hwt = document.getElementById('hist-weight');
   const wdates = Object.keys(state.weightLog).sort().reverse();
@@ -1142,7 +1154,7 @@ function renderStats(){
       hwt.appendChild(div);
     });
   }
- 
+
   // Settings inputs
   document.getElementById('set-race').value = state.profile.raceDate;
   document.getElementById('set-cal').value = state.profile.calGoal;
@@ -1151,7 +1163,7 @@ function renderStats(){
   document.getElementById('set-fat').value = state.profile.fatGoal;
   document.getElementById('set-water').value = state.profile.waterGoal;
 }
- 
+
 function saveSettings(){
   state.profile.raceDate = document.getElementById('set-race').value || state.profile.raceDate;
   state.profile.calGoal = +document.getElementById('set-cal').value || state.profile.calGoal;
@@ -1161,7 +1173,7 @@ function saveSettings(){
   state.profile.waterGoal = +document.getElementById('set-water').value || state.profile.waterGoal;
   save(); toast('Settings saved'); renderToday();
 }
- 
+
 function exportData(){
   const blob = new Blob([JSON.stringify(state, null, 2)], {type:'application/json'});
   const url = URL.createObjectURL(blob);
@@ -1194,7 +1206,7 @@ function resetData(){
   renderToday(); renderFood(); renderCalendar(); renderStats();
   toast('Reset complete');
 }
- 
+
 // ============================================================
 // REST TIMER
 // ============================================================
@@ -1204,7 +1216,7 @@ let restTimerTotal = 0;      // initial seconds (for adjust math)
 let restTimerExpired = false;
 let restTimerExName = '';
 let audioCtx = null;
- 
+
 function startRestTimer(seconds, exName){
   if(!seconds || seconds <= 0) return;
   restTimerExName = exName || 'Rest';
@@ -1237,9 +1249,12 @@ function tickTimer(){
 }
 function adjustTimer(delta){
   restTimerEnd += delta*1000;
-  restTimerExpired = false;
-  document.getElementById('rest-timer').classList.remove('expired');
-  document.getElementById('rt-ex').textContent = restTimerExName;
+  // Only un-expire if the adjustment actually puts time back on the clock
+  if(restTimerExpired && (restTimerEnd - Date.now()) > 0){
+    restTimerExpired = false;
+    document.getElementById('rest-timer').classList.remove('expired');
+    document.getElementById('rt-ex').textContent = restTimerExName;
+  }
   tickTimer();
 }
 function skipTimer(){
@@ -1267,20 +1282,20 @@ function beep(){
     playTone(1175, 0.44, 0.30);
   } catch(e){}
 }
- 
+
 // ============================================================
 // INIT
 // ============================================================
 renderToday();
 </script>
- 
+
 </body>
 </html>
   document.getElementById('set-car').value = state.profile.carGoal;
   document.getElementById('set-fat').value = state.profile.fatGoal;
   document.getElementById('set-water').value = state.profile.waterGoal;
 }
- 
+
 function saveSettings(){
   state.profile.raceDate = document.getElementById('set-race').value || state.profile.raceDate;
   state.profile.calGoal = +document.getElementById('set-cal').value || state.profile.calGoal;
@@ -1290,7 +1305,7 @@ function saveSettings(){
   state.profile.waterGoal = +document.getElementById('set-water').value || state.profile.waterGoal;
   save(); toast('Settings saved'); renderToday();
 }
- 
+
 function exportData(){
   const blob = new Blob([JSON.stringify(state, null, 2)], {type:'application/json'});
   const url = URL.createObjectURL(blob);
@@ -1323,7 +1338,7 @@ function resetData(){
   renderToday(); renderFood(); renderCalendar(); renderStats();
   toast('Reset complete');
 }
- 
+
 // ============================================================
 // REST TIMER
 // ============================================================
@@ -1333,7 +1348,7 @@ let restTimerTotal = 0;
 let restTimerExpired = false;
 let restTimerExName = '';
 let audioCtx = null;
- 
+
 function startRestTimer(seconds, exName){
   if(!seconds || seconds <= 0) return;
   restTimerExName = exName || 'Rest';
@@ -1398,19 +1413,40 @@ function beep(){
     playTone(1175, 0.44, 0.30);
   } catch(e){}
 }
- 
+
 // ============================================================
 // INIT
 // ============================================================
 renderToday();
 </script>
- 
+
 </body>
 </html>
 ====
 renderToday();
 </script>
- 
+
 </body>
 </html>
- 
+ o.type = 'sine'; o.frequency.value = freq;
+      g.gain.setValueAtTime(0.0001, audioCtx.currentTime + when);
+      g.gain.exponentialRampToValueAtTime(0.35, audioCtx.currentTime + when + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + when + dur);
+      o.connect(g); g.connect(audioCtx.destination);
+      o.start(audioCtx.currentTime + when);
+      o.stop(audioCtx.currentTime + when + dur + 0.02);
+    };
+    playTone(880, 0, 0.18);
+    playTone(880, 0.22, 0.18);
+    playTone(1175, 0.44, 0.30);
+  } catch(e){}
+}
+
+// ============================================================
+// INIT
+// ============================================================
+renderToday();
+</script>
+
+</body>
+</html>
