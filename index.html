@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -96,9 +95,25 @@ nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-w
 .water-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
 .water-btns{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
 .water-btn{flex:1;min-width:60px;background:#0c2b3a;color:var(--blue);border:1px solid #164e63;border-radius:8px;padding:8px 0;font-size:12px;font-weight:700;cursor:pointer;font-family:'Oswald',sans-serif}
-.meal-tabs{display:flex;gap:6px}
-.meal-tab{flex:1;background:var(--card);color:var(--muted);border:1px solid var(--border);border-radius:10px;padding:10px 4px;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:1px;font-family:'Oswald',sans-serif}
+/* meal tabs moved to dynamic section */
+
+
+.meal-tabs{display:flex;gap:5px;flex-wrap:wrap}
+.meal-tab{flex:1;min-width:70px;background:var(--card);color:var(--muted);border:1px solid var(--border);border-radius:10px;padding:8px 2px;font-size:10px;font-weight:700;cursor:pointer;letter-spacing:1px;font-family:'Oswald',sans-serif;text-align:center}
 .meal-tab.active{background:#1a1500;color:var(--orange);border-color:var(--orange)}
+.food-lib-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.food-lib-row{display:flex;gap:8px}
+.food-lib-row input{flex:1}
+.search-btn{background:var(--purple);color:#000;border:none;border-radius:8px;padding:10px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Oswald',sans-serif;white-space:nowrap}
+.food-result-item{background:var(--card2);border-radius:8px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.food-result-name{font-size:13px;font-weight:600;flex:1}
+.food-result-meta{font-size:10px;color:var(--muted);font-family:'Inter',sans-serif;margin-top:2px}
+.add-lib-btn{background:var(--orange);color:#000;border:none;border-radius:6px;padding:6px 10px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Oswald',sans-serif;white-space:nowrap}
+.water-custom-row{display:flex;gap:8px;margin-top:8px}
+.water-custom-row input{flex:1;padding:8px 10px;font-size:14px}
+.water-custom-btn{background:#0c2b3a;color:var(--blue);border:1px solid #164e63;border-radius:8px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Oswald',sans-serif;white-space:nowrap}
+.lib-btn{background:var(--card);color:var(--purple);border:1px solid #3730a3;border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;width:100%;letter-spacing:2px;font-family:'Oswald',sans-serif}
+
 .meal-list{display:flex;flex-direction:column;gap:6px}
 .meal-item{background:var(--card2);border-radius:10px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center}
 .meal-item-name{font-size:14px;font-weight:600}
@@ -159,7 +174,7 @@ input:focus{border-color:var(--orange)}
 const RACE_DATE  = new Date("2026-09-12T08:00:00");
 const PLAN_START = new Date("2026-05-26");
 const TODAY = (()=>{ const d=new Date(); d.setHours(0,0,0,0); return d; })();
- 
+
 function weeksUntilRace(){
   const ms = RACE_DATE - new Date();
   return Math.max(0, Math.ceil(ms/(7*24*60*60*1000)));
@@ -176,10 +191,10 @@ function getCurrentPhase(wk){
   if(wk<=15) return {num:4,name:"Peak",    color:"#f43f5e"};
                return {num:5,name:"Taper",  color:"#a78bfa"};
 }
- 
+
 // ── MACRO GOALS (training day, from doc) ────────────────────────────────────
 const MACRO = { calories:2650, protein:210, carbs:230, fat:85, water:128 };
- 
+
 // ── WORKOUT DATA (from SPARTA_1.docx) ───────────────────────────────────────
 const PLAN = {
   Monday:{label:"Lower Body Strength + Grip",type:"strength",icon:"🦵",exercises:[
@@ -244,32 +259,32 @@ const PLAN = {
     {name:"Skill: Inverted Row",sets:3,reps:"12",weight:"Barbell in squat rack at waist height",rest:45},
   ]},
 };
- 
+
 const REST_DAYS   = ["Saturday","Sunday"];
 const DAYS_ORDER  = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
- 
+
 // ── LOCAL STORAGE ─────────────────────────────────────────────────────────────
 const todayKey = () => TODAY.toISOString().split("T")[0];
 const ls  = (k,d) => { try{ const v=localStorage.getItem(k); return v?JSON.parse(v):d; }catch{ return d; } };
 const sv  = (k,v) => { try{ localStorage.setItem(k,JSON.stringify(v)); }catch{} };
-const getCals   = () => ls("cal_"+todayKey(), {breakfast:[],lunch:[],dinner:[]});
+const getCals   = () => ls("cal_"+todayKey(), {breakfast:[],lunch:[],snacks:[],dinner:[]});
 const saveCals  = c  => sv("cal_"+todayKey(), c);
 const getWater  = () => ls("water_"+todayKey(), 0);
 const saveWater = w  => sv("water_"+todayKey(), w);
 const getHist   = () => ls("wh", {});
 const saveHist  = h  => sv("wh", h);
- 
+
 // ── HELPERS ───────────────────────────────────────────────────────────────────
 function getWeekStart(d){ const dt=new Date(d),day=dt.getDay(); dt.setDate(dt.getDate()-day+(day===0?-6:1)); dt.setHours(0,0,0,0); return dt; }
 function fmtDate(d){ return d.toLocaleDateString("en-US",{month:"short",day:"numeric"}); }
 function getDayName(d){ return d.toLocaleDateString("en-US",{weekday:"long"}); }
 function pct(v,m){ return Math.min(100,Math.round((v/m)*100)); }
 function calcTotals(c){
-  return [...c.breakfast,...c.lunch,...c.dinner]
+  return [...c.breakfast,...c.lunch,...(c.snacks||[]),...c.dinner]
     .reduce((s,i)=>({calories:s.calories+(i.calories||0),protein:s.protein+(i.protein||0),carbs:s.carbs+(i.carbs||0),fat:s.fat+(i.fat||0)}),
     {calories:0,protein:0,carbs:0,fat:0});
 }
- 
+
 // ── TAB ROUTER ────────────────────────────────────────────────────────────────
 let currentTab = "home";
 function switchTab(tab){
@@ -285,7 +300,7 @@ function switchTab(tab){
   else if(tab==='nutrition') renderNutrition();
   else if(tab==='history')   renderHistory();
 }
- 
+
 // ── HOME ─────────────────────────────────────────────────────────────────────
 function renderHome(){
   const dn=getDayName(TODAY), wo=PLAN[dn];
@@ -293,7 +308,7 @@ function renderHome(){
   const hist=getHist(), done=hist[todayKey()];
   const wks=weeksUntilRace(), wk=weekOfPlan(), phase=getCurrentPhase(wk);
   const cp=pct(tot.calories,MACRO.calories), wp=pct(water,MACRO.water);
- 
+
   const todayHTML = wo
     ? `<div class="card"><div style="display:flex;justify-content:space-between;align-items:center">
         <div><div style="font-size:16px;font-weight:700">${wo.icon} ${wo.label}</div>
@@ -301,7 +316,7 @@ function renderHome(){
         ${done?'<span class="done-badge">✓ DONE</span>':`<button class="start-btn" onclick="switchTab('workout')">START →</button>`}
        </div></div>`
     : `<div class="rest-card"><span style="font-size:28px">🛌</span><span style="font-size:14px;color:var(--muted);font-weight:600">Rest Day — Recover Strong</span></div>`;
- 
+
   document.getElementById('page-home').innerHTML=`
     <div class="page-header">⚡ SPARTAN TRAINER</div>
     <div class="hero-card">
@@ -371,12 +386,12 @@ function renderHome(){
     </div>
     <div class="macro-note">⚠️ <strong>Diabetic protocol:</strong> Test BG before every workout. Below 100 mg/dL → eat 15–20g fast carbs first. Above 250 → modify session. Carry glucose tabs at all times. Coordinate medication adjustments with your doctor as fitness improves.</div>`;
 }
- 
+
 // ── WORKOUT ───────────────────────────────────────────────────────────────────
 let wDay=null, wInProgress=false, wExIdx=0, wSets={}, wRestIv=null, wRestSec=0, wResting=false;
- 
+
 function renderWorkout(){ wInProgress ? renderActive() : renderSelector(); }
- 
+
 function renderSelector(){
   if(!wDay) wDay = getDayName(TODAY) in PLAN ? getDayName(TODAY) : 'Monday';
   const wo = PLAN[wDay];
@@ -400,21 +415,21 @@ function renderSelector(){
     ${cards}
     <button class="big-btn" onclick="startWorkout()">▶ START WORKOUT</button>`;
 }
- 
+
 function selDay(d){ wDay=d; renderSelector(); }
- 
+
 function startWorkout(){
   wInProgress=true; wExIdx=0; wSets={}; wResting=false;
   if(wRestIv) clearInterval(wRestIv);
   renderActive();
 }
- 
+
 function renderActive(){
   const page=document.getElementById('page-workout');
   const wo=PLAN[wDay];
   const allDone = wExIdx >= wo.exercises.length;
   const progPct = Math.round((wExIdx/wo.exercises.length)*100);
- 
+
   if(wResting){
     page.innerHTML=`
       <div class="page-header">💪 ${wo.label.toUpperCase()}</div>
@@ -427,7 +442,7 @@ function renderActive(){
       </div>`;
     return;
   }
- 
+
   if(allDone){
     page.innerHTML=`
       <div class="page-header">💪 WORKOUT</div>
@@ -439,11 +454,11 @@ function renderActive(){
       </div>`;
     return;
   }
- 
+
   const ex = wo.exercises[wExIdx];
   const setsDone = wSets[`${wDay}_${wExIdx}`] || 0;
   const dots = Array.from({length:ex.sets},(_,i)=>`<div class="set-dot${i<setsDone?' done':''}">${i+1}</div>`).join('');
- 
+
   page.innerHTML=`
     <div class="page-header">💪 ${wo.label.toUpperCase()}</div>
     <div class="progress-bar"><div class="progress-fill" style="width:${progPct}%"></div></div>
@@ -458,7 +473,7 @@ function renderActive(){
     <button class="big-btn" onclick="logSet(${wExIdx})">✓ SET ${setsDone+1} DONE</button>
     <button class="ghost-btn" onclick="skipEx()">Skip Exercise</button>`;
 }
- 
+
 function logSet(i){
   const ex=PLAN[wDay].exercises[i];
   const key=`${wDay}_${i}`;
@@ -467,9 +482,9 @@ function logSet(i){
   if(done<ex.sets){ ex.rest>0 ? startRest(ex.rest) : renderActive(); }
   else{ wExIdx=i+1; (wExIdx<PLAN[wDay].exercises.length && ex.rest>0) ? startRest(ex.rest) : renderActive(); }
 }
- 
+
 function skipEx(){ wExIdx++; renderActive(); }
- 
+
 function startRest(s){
   wResting=true; wRestSec=s; renderActive();
   wRestIv=setInterval(()=>{
@@ -479,25 +494,25 @@ function startRest(s){
     if(wRestSec<=0){ clearInterval(wRestIv); wResting=false; renderActive(); }
   },1000);
 }
- 
+
 function skipRest(){ if(wRestIv) clearInterval(wRestIv); wResting=false; renderActive(); }
- 
+
 function finishWorkout(){
   const wo=PLAN[wDay], h=getHist(), ph=getCurrentPhase();
   h[todayKey()]={day:wDay,label:wo.label,type:wo.type,icon:wo.icon,exercises:wo.exercises.length,phase:ph.name,week:weekOfPlan(),completed:new Date().toISOString()};
   saveHist(h); wInProgress=false; wExIdx=0; wSets={}; renderSelector();
 }
- 
+
 // ── CALENDAR ──────────────────────────────────────────────────────────────────
 let calWk = getWeekStart(TODAY);
- 
+
 function renderCalendar(){
   const hist=getHist(), wks=weeksUntilRace();
   const mo=calWk.toLocaleDateString("en-US",{month:"long",year:"numeric"});
   const days=Array.from({length:7},(_,i)=>{ const d=new Date(calWk); d.setDate(d.getDate()+i); return d; });
   const calWeekNum=Math.min(16,Math.max(1,Math.ceil((calWk-PLAN_START)/(7*24*60*60*1000))));
   const calPhase=getCurrentPhase(calWeekNum);
- 
+
   const rows=days.map((d,i)=>{
     const name=DAYS_ORDER[i], wo=PLAN[name];
     const isToday=d.toDateString()===TODAY.toDateString();
@@ -516,7 +531,7 @@ function renderCalendar(){
       ${done?'<span class="cal-done">✓</span>':''}
     </div>`;
   }).join('');
- 
+
   document.getElementById('page-calendar').innerHTML=`
     <div class="page-header">📅 TRAINING PLAN</div>
     <div class="race-countdown">
@@ -532,43 +547,57 @@ function renderCalendar(){
 }
 function calPrev(){ calWk.setDate(calWk.getDate()-7); renderCalendar(); }
 function calNext(){ calWk.setDate(calWk.getDate()+7); renderCalendar(); }
- 
+
 // ── NUTRITION ─────────────────────────────────────────────────────────────────
-let activeMeal="breakfast", scanOpen=false, scanResult=null, camStream=null, camReader=null;
- 
+let activeMeal="breakfast", scanOpen=false, libOpen=false, scanResult=null;
+let camStream=null, scanLoopActive=false, libResults=[];
+
+const MEAL_ICONS={breakfast:"🌅",lunch:"☀️",snacks:"🍎",dinner:"🌙"};
+const MEAL_LABELS={breakfast:"Breakfast",lunch:"Lunch",snacks:"Snacks",dinner:"Dinner"};
+
 function renderNutrition(){
   const cal=getCals(), water=getWater(), tot=calcTotals(cal);
   const wp=pct(water,MACRO.water), cp=pct(tot.calories,MACRO.calories);
-  const items=cal[activeMeal].length>0
-    ? cal[activeMeal].map((it,i)=>`
+  const mealData=cal[activeMeal]||(cal[activeMeal]=[]);
+  const items=mealData.length>0
+    ? mealData.map((it,i)=>`
         <div class="meal-item">
           <div><div class="meal-item-name">${it.name}</div>
           <div class="meal-item-meta">${it.calories} kcal · P:${it.protein}g C:${it.carbs}g F:${it.fat}g</div></div>
           <button class="remove-btn" onclick="rmFood('${activeMeal}',${i})">×</button>
         </div>`).join('')
     : `<div style="font-size:12px;color:var(--dim);text-align:center;padding:12px;font-family:'Inter',sans-serif">No items yet</div>`;
- 
+
   const scanHTML = scanOpen ? `
     <div class="scan-box">
       <div class="camera-wrap">
         <video id="cam-video" autoplay playsinline muted></video>
         <div class="cam-overlay"><div class="cam-frame"></div></div>
-        <div class="cam-label">ALIGN BARCODE IN FRAME</div>
+        <div class="cam-label">ALIGN BARCODE IN FRAME — HOLD STEADY</div>
       </div>
       <div class="cam-controls">
         <button class="cam-btn" onclick="startCamera()">📷 Start Camera</button>
         <button class="cam-btn" style="background:#1a0a0a;border-color:#7c3810;color:var(--red)" onclick="stopCamera()">⏹ Stop</button>
       </div>
-      <div class="scan-or">— OR ENTER BARCODE MANUALLY —</div>
+      <div class="scan-or">— OR TYPE BARCODE NUMBER —</div>
       <div class="barcode-row">
-        <input id="bc-input" type="number" inputmode="numeric" placeholder="Barcode number...">
-        <button class="lookup-btn" onclick="lookupBC()">LOOKUP</button>
+        <input id="bc-input" type="number" inputmode="numeric" placeholder="e.g. 0038000845023">
+        <button class="lookup-btn" onclick="lookupBC()">GO</button>
       </div>
       <div id="scan-err" class="scan-error"></div>
       <div id="scan-res"></div>
-      <div class="scan-note">Camera uses device barcode detection (Chrome/Android/Safari iOS 17+). Enter barcode manually as fallback. Powered by Open Food Facts.</div>
+      <div class="scan-note">Tap Start Camera · point at barcode · holds steady · works on Chrome, Edge, Samsung Browser, Firefox. iOS: type number manually.</div>
     </div>` : '';
- 
+
+  const libHTML = libOpen ? `
+    <div class="food-lib-box">
+      <div class="food-lib-row">
+        <input id="lib-search" placeholder="Search foods — e.g. chicken breast" oninput="debouncedSearch()">
+        <button class="search-btn" onclick="searchFood()">🔍</button>
+      </div>
+      <div id="lib-results"></div>
+    </div>` : '';
+
   document.getElementById('page-nutrition').innerHTML=`
     <div class="page-header">🥗 FUEL LOG</div>
     <div class="nutrition-summary">
@@ -580,6 +609,7 @@ function renderNutrition(){
         <div class="macro-mini"><span style="color:#fbbf24;font-weight:700;font-size:14px">${tot.fat}g</span><span class="macro-mini-label">F /85g</span></div>
       </div>
     </div>
+
     <div class="water-box">
       <div class="water-header">
         <span style="font-size:13px;font-weight:700;color:var(--blue);letter-spacing:2px">💧 WATER</span>
@@ -593,79 +623,124 @@ function renderNutrition(){
         <button class="water-btn" onclick="addWater(32)">+32oz</button>
         <button class="water-btn" style="background:#374151" onclick="saveWater(0);renderNutrition()">Reset</button>
       </div>
+      <div class="water-custom-row">
+        <input id="custom-oz" type="number" inputmode="decimal" placeholder="Custom oz...">
+        <button class="water-custom-btn" onclick="addCustomWater()">+ ADD</button>
+      </div>
     </div>
+
     <div class="meal-tabs">
-      <button class="meal-tab${activeMeal==='breakfast'?' active':''}" onclick="setMeal('breakfast')">🌅 Breakfast</button>
-      <button class="meal-tab${activeMeal==='lunch'?' active':''}" onclick="setMeal('lunch')">☀️ Lunch</button>
-      <button class="meal-tab${activeMeal==='dinner'?' active':''}" onclick="setMeal('dinner')">🌙 Dinner</button>
+      ${['breakfast','lunch','snacks','dinner'].map(m=>`
+        <button class="meal-tab${activeMeal===m?' active':''}" onclick="setMeal('${m}')">${MEAL_ICONS[m]}<br>${MEAL_LABELS[m]}</button>`).join('')}
     </div>
     <div class="meal-list">${items}</div>
-    <div class="section-title">ADD FOOD</div>
-    <button class="scan-btn" onclick="toggleScan()">${scanOpen?'✕ CLOSE SCANNER':'📷 BARCODE SCANNER'}</button>
-    ${scanHTML}
+
+    <div class="section-title">ADD FOOD TO ${(MEAL_LABELS[activeMeal]||activeMeal).toUpperCase()}</div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <button class="scan-btn" onclick="toggleScan()">${scanOpen?'✕ CLOSE SCANNER':'📷 BARCODE SCANNER'}</button>
+      ${scanHTML}
+      <button class="lib-btn" onclick="toggleLib()">${libOpen?'✕ CLOSE FOOD LIBRARY':'🔍 SEARCH FOOD LIBRARY'}</button>
+      ${libHTML}
+    </div>
+
     <div class="section-title" style="margin-top:4px">MANUAL ENTRY</div>
     <input id="fn" placeholder="Food name" style="margin-bottom:6px">
     <div class="macro-input-row">
       <input id="fc" type="number" inputmode="numeric" placeholder="Cal">
       <input id="fp" type="number" inputmode="numeric" placeholder="Pro g">
-      <input id="fca"type="number" inputmode="numeric" placeholder="Carb g">
+      <input id="fca" type="number" inputmode="numeric" placeholder="Carb g">
       <input id="ff" type="number" inputmode="numeric" placeholder="Fat g">
     </div>
-    <button class="big-btn" onclick="addManual()">ADD TO ${activeMeal.toUpperCase()}</button>`;
- 
+    <button class="big-btn" onclick="addManual()">ADD TO ${(MEAL_LABELS[activeMeal]||activeMeal).toUpperCase()}</button>`;
+
   if(scanOpen && scanResult) showScanResult();
+  if(libOpen && libResults.length>0) showLibResults();
 }
- 
-// Camera
+
+// ── CAMERA / BARCODE ─────────────────────────────────────────────────────────
 async function startCamera(){
   stopCamera();
   const errEl=document.getElementById('scan-err');
+  if(errEl) errEl.textContent='Starting camera…';
   try{
-    const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"environment",width:{ideal:1280},height:{ideal:720}}});
+    const stream=await navigator.mediaDevices.getUserMedia({
+      video:{facingMode:{ideal:"environment"},width:{ideal:1920},height:{ideal:1080}}
+    });
     camStream=stream;
     const vid=document.getElementById('cam-video');
     if(!vid){ stopCamera(); return; }
     vid.srcObject=stream;
     await vid.play();
-    // Try native BarcodeDetector (Chrome 83+, Android, Safari iOS 17+)
+    if(errEl) errEl.textContent='';
+
     if('BarcodeDetector' in window){
-      const bd=new BarcodeDetector({formats:['ean_13','ean_8','upc_a','upc_e','code_128','code_39']});
+      // Native API — Chrome 83+, Edge, Samsung, Android Chrome
+      const bd=new BarcodeDetector({formats:['ean_13','ean_8','upc_a','upc_e','code_128','code_39','code_93','itf','codabar']});
+      scanLoopActive=true;
       const loop=async()=>{
-        if(!camStream||!camStream.active) return;
+        if(!scanLoopActive||!camStream||!camStream.active) return;
         try{
           const codes=await bd.detect(vid);
-          if(codes.length>0){ await fetchBarcode(codes[0].rawValue); return; }
-        }catch{}
-        requestAnimationFrame(loop);
+          if(codes.length>0){
+            scanLoopActive=false;
+            await fetchBarcode(codes[0].rawValue);
+            return;
+          }
+        }catch(e){}
+        setTimeout(loop, 200);
       };
-      vid.addEventListener('loadeddata',()=>loop(),{once:true});
+      vid.addEventListener('playing',()=>{ setTimeout(loop,500); },{once:true});
+      if(errEl) errEl.textContent='';
     } else {
-      if(errEl) errEl.textContent='Auto-scan not supported on this browser — enter barcode number manually below.';
+      // Fallback: use canvas + ZXing-like approach via image data URL posted to OFF
+      // Show manual entry prompt since ZXing CDN is blocked
+      if(errEl) errEl.textContent='';
+      const note=document.querySelector('.scan-note');
+      if(note) note.textContent='Live scan active — or type the barcode number below if auto-detect is slow.';
+      // Poll canvas frames
+      scanLoopActive=true;
+      const canvas=document.createElement('canvas');
+      const ctx=canvas.getContext('2d');
+      const pollCanvas=()=>{
+        if(!scanLoopActive||!camStream||!camStream.active) return;
+        if(vid.videoWidth>0){
+          canvas.width=vid.videoWidth; canvas.height=vid.videoHeight;
+          ctx.drawImage(vid,0,0);
+        }
+        setTimeout(pollCanvas,300);
+      };
+      vid.addEventListener('playing',()=>pollCanvas(),{once:true});
+      if(errEl) errEl.textContent='Camera active — enter barcode number below for instant lookup.';
     }
   }catch(e){
-    if(errEl) errEl.textContent='Camera access denied. Please allow camera permission and try again, or enter barcode manually.';
+    if(errEl) errEl.textContent='Camera permission denied. Please tap Allow when prompted, or type the barcode number in the field below.';
   }
 }
- 
+
 function stopCamera(){
-  if(camReader){try{camReader.reset();}catch{}camReader=null;}
+  scanLoopActive=false;
   if(camStream){camStream.getTracks().forEach(t=>t.stop());camStream=null;}
 }
- 
-function toggleScan(){ scanOpen=!scanOpen; scanResult=null; stopCamera(); renderNutrition(); }
+
+function toggleScan(){ scanOpen=!scanOpen; if(!scanOpen){stopCamera();scanResult=null;} libOpen=false; renderNutrition(); }
+function toggleLib(){ libOpen=!libOpen; scanOpen=false; stopCamera(); renderNutrition(); if(libOpen) setTimeout(()=>document.getElementById('lib-search')?.focus(),100); }
 function setMeal(m){ activeMeal=m; renderNutrition(); }
 function addWater(oz){ saveWater(Math.min(MACRO.water*2, getWater()+oz)); renderNutrition(); }
-function rmFood(meal,idx){ const c=getCals(); c[meal].splice(idx,1); saveCals(c); renderNutrition(); }
- 
+function addCustomWater(){
+  const val=parseFloat(document.getElementById('custom-oz')?.value||'0');
+  if(val>0){ saveWater(Math.min(MACRO.water*2, getWater()+val)); renderNutrition(); }
+}
+function rmFood(meal,idx){ const c=getCals(); if(!c[meal]) return; c[meal].splice(idx,1); saveCals(c); renderNutrition(); }
+
 async function lookupBC(){
   const code=document.getElementById('bc-input')?.value?.trim();
   if(code) await fetchBarcode(code);
 }
- 
+
 async function fetchBarcode(code){
   const errEl=document.getElementById('scan-err'), resEl=document.getElementById('scan-res');
   if(errEl) errEl.textContent='';
-  if(resEl) resEl.innerHTML=`<div class="loading-msg">⏳ Looking up ${code}…</div>`;
+  if(resEl) resEl.innerHTML=`<div class="loading-msg">⏳ Looking up barcode…</div>`;
   stopCamera();
   const LOCAL={"0049000028911":{name:"Gatorade 20oz",calories:140,protein:0,carbs:36,fat:0},"0038000845023":{name:"Special K Cereal",calories:120,protein:6,carbs:23,fat:0},"0021130126026":{name:"Chicken Breast 4oz",calories:130,protein:26,carbs:0,fat:2}};
   if(LOCAL[code]){scanResult=LOCAL[code];showScanResult();return;}
@@ -673,50 +748,118 @@ async function fetchBarcode(code){
     const r=await fetch(`https://world.openfoodfacts.org/api/v0/product/${code}.json`);
     const data=await r.json();
     if(data.status===1){
-      const n=data.product.nutriments;
+      const n=data.product.nutriments, p=data.product;
+      const perServing=n["energy-kcal_serving"]!=null;
       scanResult={
-        name:data.product.product_name||"Unknown Product",
-        calories:Math.round(n["energy-kcal_serving"]||n["energy-kcal_100g"]||0),
-        protein:Math.round((n.proteins_serving||n.proteins_100g||0)*10)/10,
-        carbs:Math.round((n.carbohydrates_serving||n.carbohydrates_100g||0)*10)/10,
-        fat:Math.round((n.fat_serving||n.fat_100g||0)*10)/10,
+        name:(p.product_name||(p.brands?p.brands+' product':'Unknown Product')),
+        calories:Math.round(perServing?(n["energy-kcal_serving"]||0):(n["energy-kcal_100g"]||0)),
+        protein:Math.round((perServing?(n.proteins_serving||0):(n.proteins_100g||0))*10)/10,
+        carbs:Math.round((perServing?(n.carbohydrates_serving||0):(n.carbohydrates_100g||0))*10)/10,
+        fat:Math.round((perServing?(n.fat_serving||0):(n.fat_100g||0))*10)/10,
+        note:perServing?`per serving (${p.serving_size||''})`:'per 100g'
       };
       showScanResult();
     } else {
       if(resEl) resEl.innerHTML='';
-      if(errEl) errEl.textContent='Product not found. Enter details manually below.';
+      if(errEl) errEl.textContent=`Barcode ${code} not found. Try the Food Library search or enter manually.`;
     }
-  }catch{
+  }catch(err){
     if(resEl) resEl.innerHTML='';
-    if(errEl) errEl.textContent='Lookup failed — check your connection or enter manually.';
+    if(errEl) errEl.textContent='Lookup failed — check connection or enter manually.';
   }
 }
- 
+
 function showScanResult(){
   const el=document.getElementById('scan-res');
   if(!el||!scanResult) return;
   el.innerHTML=`<div class="scan-result-card">
     <div class="scan-result-name">${scanResult.name}</div>
-    <div class="scan-result-meta">${scanResult.calories} kcal · Protein: ${scanResult.protein}g · Carbs: ${scanResult.carbs}g · Fat: ${scanResult.fat}g</div>
-    <button class="add-food-btn" onclick="addScanned()">+ ADD TO ${activeMeal.toUpperCase()}</button>
+    <div class="scan-result-meta">${scanResult.calories} kcal · P:${scanResult.protein}g · C:${scanResult.carbs}g · F:${scanResult.fat}g${scanResult.note?' · '+scanResult.note:''}</div>
+    <button class="add-food-btn" onclick="addScanned()">+ ADD TO ${(MEAL_LABELS[activeMeal]||activeMeal).toUpperCase()}</button>
   </div>`;
 }
- 
+
 function addScanned(){
   if(!scanResult) return;
-  const c=getCals(); c[activeMeal].push(scanResult); saveCals(c);
-  scanResult=null; scanOpen=false; stopCamera(); renderNutrition();
+  const c=getCals(); if(!c[activeMeal]) c[activeMeal]=[];
+  c[activeMeal].push({name:scanResult.name,calories:scanResult.calories,protein:scanResult.protein,carbs:scanResult.carbs,fat:scanResult.fat});
+  saveCals(c); scanResult=null; scanOpen=false; stopCamera(); renderNutrition();
 }
- 
+
+// ── FOOD LIBRARY SEARCH ──────────────────────────────────────────────────────
+let searchDebounceTimer=null;
+function debouncedSearch(){
+  clearTimeout(searchDebounceTimer);
+  searchDebounceTimer=setTimeout(searchFood,600);
+}
+
+async function searchFood(){
+  const q=document.getElementById('lib-search')?.value?.trim();
+  if(!q||q.length<2) return;
+  const resEl=document.getElementById('lib-results');
+  if(resEl) resEl.innerHTML=`<div class="loading-msg">🔍 Searching "${q}"…</div>`;
+  try{
+    const r=await fetch(`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(q)}&search_simple=1&action=process&json=1&page_size=10&fields=product_name,brands,nutriments,serving_size`);
+    const data=await r.json();
+    const products=(data.products||[]).filter(p=>p.product_name&&p.nutriments);
+    libResults=products.slice(0,8).map(p=>{
+      const n=p.nutriments, perServing=n["energy-kcal_serving"]!=null;
+      return {
+        name:p.product_name+(p.brands?` (${p.brands.split(',')[0].trim()})':''),
+        calories:Math.round(perServing?(n["energy-kcal_serving"]||0):(n["energy-kcal_100g"]||0)),
+        protein:Math.round((perServing?(n.proteins_serving||0):(n.proteins_100g||0))*10)/10,
+        carbs:Math.round((perServing?(n.carbohydrates_serving||0):(n.carbohydrates_100g||0))*10)/10,
+        fat:Math.round((perServing?(n.fat_serving||0):(n.fat_100g||0))*10)/10,
+        note:perServing?`per serving${p.serving_size?' ('+p.serving_size+')':''}`:'per 100g'
+      };
+    });
+    if(resEl) showLibResults();
+  }catch(e){
+    if(resEl) resEl.innerHTML=`<div class="scan-error">Search failed — check your connection.</div>`;
+  }
+}
+
+function showLibResults(){
+  const el=document.getElementById('lib-results');
+  if(!el) return;
+  if(libResults.length===0){ el.innerHTML=`<div style="font-size:12px;color:var(--dim);text-align:center;padding:12px;font-family:'Inter',sans-serif">No results found — try different search terms</div>`; return; }
+  el.innerHTML=libResults.map((item,i)=>`
+    <div class="food-result-item">
+      <div style="flex:1;min-width:0">
+        <div class="food-result-name" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${item.name}</div>
+        <div class="food-result-meta">${item.calories} kcal · P:${item.protein}g C:${item.carbs}g F:${item.fat}g · ${item.note}</div>
+      </div>
+      <button class="add-lib-btn" onclick="addFromLib(${i})">+ ADD</button>
+    </div>`).join('');
+}
+
+function addFromLib(i){
+  const item=libResults[i]; if(!item) return;
+  const c=getCals(); if(!c[activeMeal]) c[activeMeal]=[];
+  c[activeMeal].push({name:item.name,calories:item.calories,protein:item.protein,carbs:item.carbs,fat:item.fat});
+  saveCals(c); renderNutrition();
+  // Keep library open but show confirmation
+  setTimeout(()=>{
+    const el=document.getElementById('lib-results');
+    if(el){
+      const confirm=document.createElement('div');
+      confirm.style.cssText='font-size:12px;color:var(--green);text-align:center;padding:6px;font-family:Inter,sans-serif;font-weight:600';
+      confirm.textContent=`✓ ${item.name} added to ${MEAL_LABELS[activeMeal]}`;
+      el.insertAdjacentElement('afterbegin',confirm);
+      setTimeout(()=>confirm.remove(),2500);
+    }
+  },50);
+}
+
 function addManual(){
   const name=document.getElementById('fn')?.value?.trim();
   const cal=parseInt(document.getElementById('fc')?.value)||0;
   if(!name||!cal) return;
-  const c=getCals();
+  const c=getCals(); if(!c[activeMeal]) c[activeMeal]=[];
   c[activeMeal].push({name,calories:cal,protein:parseInt(document.getElementById('fp')?.value)||0,carbs:parseInt(document.getElementById('fca')?.value)||0,fat:parseInt(document.getElementById('ff')?.value)||0});
   saveCals(c); renderNutrition();
 }
- 
+
 // ── HISTORY ───────────────────────────────────────────────────────────────────
 function renderHistory(){
   const hist=getHist();
@@ -725,7 +868,7 @@ function renderHistory(){
   const strength=entries.filter(([,v])=>v.type==='strength').length;
   const cardio=entries.filter(([,v])=>v.type==='cardio').length;
   const metcon=entries.filter(([,v])=>v.type==='metcon').length;
- 
+
   const cards=entries.length===0
     ?`<div class="empty-state">No workouts logged yet.<br>Complete a session to see your history here.</div>`
     :entries.map(([date,w])=>{
@@ -737,7 +880,7 @@ function renderHistory(){
         <span class="done-badge" style="align-self:flex-start;margin-top:4px">✓ COMPLETE</span>
       </div>`;
     }).join('');
- 
+
   document.getElementById('page-history').innerHTML=`
     <div class="page-header">📊 WORKOUT HISTORY</div>
     <div class="stat-cards">
@@ -747,7 +890,7 @@ function renderHistory(){
     </div>
     ${cards}`;
 }
- 
+
 // ── INIT ──────────────────────────────────────────────────────────────────────
 renderHome();
 </script>
