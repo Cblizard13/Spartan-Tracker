@@ -902,4 +902,291 @@ renderHome();
 </script>
 </body>
 </html>
- 
+ cat > /tmp/fix2.py << 'PYEOF'
+with open('/mnt/user-data/outputs/spartan-training-app.html', 'r') as f:
+    content = f.read()
+
+# ── FIX 1: NAV STAYS AT BOTTOM ───────────────────────────────────────────────
+# Root cause: page body scrolls, so fixed nav scrolls with viewport but
+# visually "floats" mid-screen on some mobile browsers.
+# Fix: use height:100vh on html/body/app/screen, overflow:hidden on body,
+# let only .page div scroll. Nav is position:fixed relative to viewport always.
+
+old_base_css = "html,body{background:var(--bg);min-height:100vh;font-family:'Oswald','Impact',sans-serif;color:var(--text);overflow-x:hidden;-webkit-tap-highlight-color:transparent}\n#app{display:flex;justify-content:center;min-height:100vh}\n.screen{width:100%;max-width:430px;min-height:100vh;background:var(--bg);display:flex;flex-direction:column;position:relative;margin:0 auto}\n.page{flex:1;overflow-y:auto;padding:16px 16px 92px;display:flex;flex-direction:column;gap:12px}"
+
+new_base_css = """html,body{background:var(--bg);height:100%;width:100%;font-family:'Oswald','Impact',sans-serif;color:var(--text);overflow:hidden;-webkit-tap-highlight-color:transparent;position:fixed;left:0;top:0;right:0;bottom:0}
+#app{display:flex;justify-content:center;width:100%;height:100%}
+.screen{width:100%;max-width:430px;height:100%;background:var(--bg);display:flex;flex-direction:column;position:relative;margin:0 auto;overflow:hidden}
+.page{flex:1;overflow-y:auto;overflow-x:hidden;padding:16px 16px 92px;display:flex;flex-direction:column;gap:12px;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}"""
+
+if old_base_css in content:
+    content = content.replace(old_base_css, new_base_css)
+    print("Fix 1 (nav layout) applied")
+else:
+    print("ERROR: Could not find base CSS to replace")
+    # Try partial fix on just the nav line
+    content = content.replace(
+        "html,body{background:var(--bg);min-height:100vh;",
+        "html,body{background:var(--bg);height:100%;position:fixed;inset:0;overflow:hidden;"
+    )
+    content = content.replace(
+        "#app{display:flex;justify-content:center;min-height:100vh}",
+        "#app{display:flex;justify-content:center;width:100%;height:100%}"
+    )
+    content = content.replace(
+        ".screen{width:100%;max-width:430px;min-height:100vh;background:var(--bg);display:flex;flex-direction:column;position:relative;margin:0 auto}",
+        ".screen{width:100%;max-width:430px;height:100%;background:var(--bg);display:flex;flex-direction:column;position:relative;margin:0 auto;overflow:hidden}"
+    )
+    content = content.replace(
+        ".page{flex:1;overflow-y:auto;padding:16px 16px 92px;display:flex;flex-direction:column;gap:12px}",
+        ".page{flex:1;overflow-y:auto;overflow-x:hidden;padding:16px 16px 92px;display:flex;flex-direction:column;gap:12px;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}"
+    )
+    print("Fallback nav fixes applied")
+
+# Also update the nav CSS to be rock-solid fixed at bottom
+old_nav = "nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;display:flex;background:#0d0d14;border-top:1px solid var(--border);z-index:100;padding-bottom:env(safe-area-inset-bottom)}"
+new_nav = "nav{position:fixed;bottom:0;left:0;right:0;width:100%;max-width:430px;margin:0 auto;display:flex;background:#0d0d14;border-top:1px solid var(--border);z-index:9999;padding-bottom:env(safe-area-inset-bottom);transform:none}"
+if old_nav in content:
+    content = content.replace(old_nav, new_nav)
+    print("Nav CSS updated")
+else:
+    # try to patch just the key parts
+    content = content.replace("z-index:100;padding-bottom", "z-index:9999;padding-bottom")
+    print("Nav z-index patched")
+
+# ── FIX 2: BARCODE SCANNER — USE ZXING PROPERLY ──────────────────────────────
+# Add ZXing script tag after the Google Fonts link
+old_link = '<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">'
+new_link = '''<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/@zxing/library@0.19.1/umd/index.min.js"></script>'''
+
+if old_link in content:
+    content = content.replace(old_link, new_link)
+    print("ZXing script tag added")
+else:
+    print("ERROR: Could not add ZXing script tag")
+
+# ── FIX 3: REWRITE startCamera with proper ZXing fallback ────────────────────
+old_camera = """// ── CAMERA / BARCODE ─────────────────────────────────────────────────────────
+async function startCamera(){
+  stopCamera();
+  const errEl=document.getElementById('scan-err');
+  if(errEl) errEl.textContent='Starting camera…';
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({
+      video:{facingMode:{ideal:"environment"},width:{ideal:1920},height:{ideal:1080}}
+    });
+    camStream=stream;
+    const vid=document.getElementById('cam-video');
+    if(!vid){ stopCamera(); return; }
+    vid.srcObject=stream;
+    await vid.play();
+    if(errEl) errEl.textContent='';
+
+    if('BarcodeDetector' in window){
+      // Native API — Chrome 83+, Edge, Samsung, Android Chrome
+      const bd=new BarcodeDetector({formats:['ean_13','ean_8','upc_a','upc_e','code_128','code_39','code_93','itf','codabar']});
+      scanLoopActive=true;
+      const loop=async()=>{
+        if(!scanLoopActive||!camStream||!camStream.active) return;
+        try{
+          const codes=await bd.detect(vid);
+          if(codes.length>0){
+            scanLoopActive=false;
+            await fetchBarcode(codes[0].rawValue);
+            return;
+          }
+        }catch(e){}
+        setTimeout(loop, 200);
+      };
+      vid.addEventListener('playing',()=>{ setTimeout(loop,500); },{once:true});
+      if(errEl) errEl.textContent='';
+    } else {
+      // Fallback: use canvas + ZXing-like approach via image data URL posted to OFF
+      // Show manual entry prompt since ZXing CDN is blocked
+      if(errEl) errEl.textContent='';
+      const note=document.querySelector('.scan-note');
+      if(note) note.textContent='Live scan active — or type the barcode number below if auto-detect is slow.';
+      // Poll canvas frames
+      scanLoopActive=true;
+      const canvas=document.createElement('canvas');
+      const ctx=canvas.getContext('2d');
+      const pollCanvas=()=>{
+        if(!scanLoopActive||!camStream||!camStream.active) return;
+        if(vid.videoWidth>0){
+          canvas.width=vid.videoWidth; canvas.height=vid.videoHeight;
+          ctx.drawImage(vid,0,0);
+        }
+        setTimeout(pollCanvas,300);
+      };
+      vid.addEventListener('playing',()=>pollCanvas(),{once:true});
+      if(errEl) errEl.textContent='Camera active — enter barcode number below for instant lookup.';
+    }
+  }catch(e){
+    if(errEl) errEl.textContent='Camera permission denied. Please tap Allow when prompted, or type the barcode number in the field below.';
+  }
+}
+
+function stopCamera(){
+  scanLoopActive=false;
+  if(camStream){camStream.getTracks().forEach(t=>t.stop());camStream=null;}
+}"""
+
+new_camera = """// ── CAMERA / BARCODE ─────────────────────────────────────────────────────────
+// Strategy: try native BarcodeDetector first (Chrome/Android/Edge/Samsung)
+// Fallback: ZXing library (works on Firefox, older Chrome, iOS Safari via manual)
+let zxingReader = null;
+
+async function startCamera(){
+  stopCamera();
+  const errEl=document.getElementById('scan-err');
+  const statusEl=document.getElementById('cam-status');
+  if(errEl) errEl.textContent='';
+  if(statusEl) statusEl.textContent='📷 Requesting camera…';
+
+  try{
+    // Request back camera with reasonable resolution
+    const constraints={video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}}};
+    camStream=await navigator.mediaDevices.getUserMedia(constraints);
+    const vid=document.getElementById('cam-video');
+    if(!vid){ stopCamera(); return; }
+    vid.srcObject=camStream;
+
+    // Wait for video to be ready
+    await new Promise((resolve,reject)=>{
+      vid.onloadedmetadata=resolve;
+      vid.onerror=reject;
+      setTimeout(resolve,3000); // timeout fallback
+    });
+    await vid.play().catch(()=>{});
+
+    if(statusEl) statusEl.textContent='';
+
+    if('BarcodeDetector' in window){
+      // ── PATH A: Native BarcodeDetector (Chrome 83+, Edge, Samsung, Android) ──
+      let formats=['ean_13','ean_8','upc_a','upc_e','code_128','code_39','code_93','itf','codabar'];
+      try{ formats=await BarcodeDetector.getSupportedFormats(); }catch(e){}
+      const bd=new BarcodeDetector({formats});
+      scanLoopActive=true;
+      if(statusEl) statusEl.textContent='🔍 Scanning — hold barcode steady…';
+      const loop=async()=>{
+        if(!scanLoopActive||!camStream||!camStream.active) return;
+        try{
+          if(vid.readyState>=2){
+            const codes=await bd.detect(vid);
+            if(codes.length>0){
+              scanLoopActive=false;
+              if(statusEl) statusEl.textContent='✓ Barcode detected!';
+              await fetchBarcode(codes[0].rawValue);
+              return;
+            }
+          }
+        }catch(e){}
+        setTimeout(loop,150);
+      };
+      setTimeout(loop,800);
+
+    } else if(typeof ZXing !== 'undefined'){
+      // ── PATH B: ZXing library fallback ──
+      if(statusEl) statusEl.textContent='🔍 Scanning (ZXing)…';
+      try{
+        zxingReader=new ZXing.BrowserMultiFormatReader();
+        zxingReader.decodeFromVideoElement(vid,(result,err)=>{
+          if(result){
+            const code=result.getText();
+            stopCamera();
+            if(statusEl) statusEl.textContent='✓ Barcode detected!';
+            fetchBarcode(code);
+          }
+        });
+      }catch(e){
+        if(statusEl) statusEl.textContent='';
+        if(errEl) errEl.textContent='Scanner error. Enter barcode manually below.';
+      }
+    } else {
+      // ── PATH C: Camera on but no decoder — show helpful message ──
+      if(statusEl) statusEl.textContent='📷 Camera ready';
+      if(errEl) errEl.textContent='Auto-scan unavailable on this browser. Type the barcode number from the package below — lookup is instant.';
+    }
+
+  }catch(e){
+    if(statusEl) statusEl.textContent='';
+    const msg = e.name==='NotAllowedError'
+      ? 'Camera permission denied. Go to browser Settings → Site Settings → Camera and allow this page, then try again.'
+      : e.name==='NotFoundError'
+      ? 'No camera found on this device.'
+      : 'Camera error: '+e.message+'. Enter barcode manually below.';
+    if(errEl) errEl.textContent=msg;
+  }
+}
+
+function stopCamera(){
+  scanLoopActive=false;
+  if(zxingReader){try{zxingReader.reset();}catch(e){}zxingReader=null;}
+  if(camStream){camStream.getTracks().forEach(t=>t.stop());camStream=null;}
+}"""
+
+if old_camera in content:
+    content = content.replace(old_camera, new_camera)
+    print("Camera code replaced")
+else:
+    print("ERROR: Camera code not found for replacement")
+    idx = content.find("// ── CAMERA / BARCODE")
+    print(f"Camera section found at index: {idx}")
+
+# ── FIX 4: Update scanHTML in renderNutrition to include status element ──────
+old_scan_html = """  const scanHTML = scanOpen ? `
+    <div class="scan-box">
+      <div class="camera-wrap">
+        <video id="cam-video" autoplay playsinline muted></video>
+        <div class="cam-overlay"><div class="cam-frame"></div></div>
+        <div class="cam-label">ALIGN BARCODE IN FRAME — HOLD STEADY</div>
+      </div>
+      <div class="cam-controls">
+        <button class="cam-btn" onclick="startCamera()">📷 Start Camera</button>
+        <button class="cam-btn" style="background:#1a0a0a;border-color:#7c3810;color:var(--red)" onclick="stopCamera()">⏹ Stop</button>
+      </div>
+      <div class="scan-or">— OR TYPE BARCODE NUMBER —</div>
+      <div class="barcode-row">
+        <input id="bc-input" type="number" inputmode="numeric" placeholder="e.g. 0038000845023">
+        <button class="lookup-btn" onclick="lookupBC()">GO</button>
+      </div>
+      <div id="scan-err" class="scan-error"></div>
+      <div id="scan-res"></div>
+      <div class="scan-note">Tap Start Camera · point at barcode · holds steady · works on Chrome, Edge, Samsung Browser, Firefox. iOS: type number manually.</div>
+    </div>` : '';"""
+
+new_scan_html = """  const scanHTML = scanOpen ? `
+    <div class="scan-box">
+      <div class="camera-wrap">
+        <video id="cam-video" autoplay playsinline muted></video>
+        <div class="cam-overlay"><div class="cam-frame"></div></div>
+        <div class="cam-label">ALIGN BARCODE IN FRAME</div>
+      </div>
+      <div id="cam-status" style="font-size:12px;color:var(--blue);text-align:center;font-family:'Inter',sans-serif;min-height:18px"></div>
+      <div class="cam-controls">
+        <button class="cam-btn" onclick="startCamera()">📷 Start Camera</button>
+        <button class="cam-btn" style="background:#1a0a0a;border-color:#7c3810;color:var(--red)" onclick="stopCamera()">⏹ Stop</button>
+      </div>
+      <div class="scan-or">— OR TYPE BARCODE NUMBER —</div>
+      <div class="barcode-row">
+        <input id="bc-input" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="Type barcode number here...">
+        <button class="lookup-btn" onclick="lookupBC()">GO</button>
+      </div>
+      <div id="scan-err" class="scan-error"></div>
+      <div id="scan-res"></div>
+      <div class="scan-note">Android/Chrome: tap Start Camera for auto-scan. iPhone/Safari: type the barcode number from the package. Powered by Open Food Facts.</div>
+    </div>` : '';"""
+
+if old_scan_html in content:
+    content = content.replace(old_scan_html, new_scan_html)
+    print("Scan HTML updated")
+else:
+    print("ERROR: scanHTML not found")
+
+with open('/mnt/user-data/outputs/spartan-training-app.html', 'w') as f:
+    f.write(content)
+
+print(f"\nFile written: {len(content)} bytes")
+PYEOF
+python3 /tmp/fix2.py
